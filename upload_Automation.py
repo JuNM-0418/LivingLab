@@ -15,8 +15,9 @@ worksheet = doc.worksheet("1-1. 전력량 (15min)")
 file_list = {"309.csv": 2, "310.csv": 3, "313.csv": 4,
              "314.csv": 5, "315.csv": 6, "316.csv": 7}
 
-day_step = 1
-start_day = datetime.datetime.now() - datetime.timedelta(days=day_step)
+
+start_day = 28
+
 
 tmp_data = [[], [], [], [], [], [], []]
 
@@ -28,15 +29,53 @@ for file in file_list:
 
 # 원하는 데이터의 시작 인덱스 넘버를 저장
     for i in range(1, len(df)-1, 1):
-        target_day = datetime.datetime.strptime(df.loc[i][1][:-9], "%Y-%m-%d")
-        if (start_day.day == target_day.day):
+        if (df.loc[i][1][:-9] == None or df.loc[i][1][:-9] == '' or df.loc[i][1][:-9] == ' '):
+            start_index = i
+            break
+
+        # if (file == "309.csv" or file == "314.csv" or file == "316.csv"):
+        #     target_day = datetime.datetime.strptime(
+        #         df.loc[i][1][:-6], "%Y-%m-%d %H:%M:%S")
+        # else:
+        #     target_day = datetime.datetime.strptime(
+        #         df.loc[i][1][:-9], "%Y-%m-%d")
+
+        if (len(df.loc[i][1]) == 19):
+            target_day = datetime.datetime.strptime(
+                df.loc[i][1][:-9], "%Y-%m-%d")
+        elif (len(df.loc[i][1]) == 16):
+            target_day = datetime.datetime.strptime(
+                df.loc[i][1][:-6], "%Y-%m-%d")
+        else:
+            target_day = datetime.datetime.strptime(
+                df.loc[i][1][:-5], "%Y-%m-%d")
+
+        if (start_day == target_day.day):
             start_index = i
             break
 
 # 원하는 데이터의 끝 인덱스 넘버를 저장
     for i in range(start_index, len(df)-1, 1):
-        target_day = datetime.datetime.strptime(df.loc[i][1][:-9], "%Y-%m-%d")
-        if (start_day.day != target_day.day):
+        if (df.loc[i][1][:-9] == None or df.loc[i][1][:-9] == '' or df.loc[i][1][:-9] == ' '):
+            end_index = i
+            break
+        # if (file == "309.csv" or file == "314.csv" or file == "316.csv"):
+        #     target_day = datetime.datetime.strptime(
+        #         df.loc[i][1][:-6], "%Y-%m-%d")
+        # else:
+        #     target_day = datetime.datetime.strptime(
+        #         df.loc[i][1][:-9], "%Y-%m-%d")
+
+        if (len(df.loc[i][1]) == 19):
+            target_day = datetime.datetime.strptime(
+                df.loc[i][1][:-9], "%Y-%m-%d")
+        elif (len(df.loc[i][1]) == 16):
+            target_day = datetime.datetime.strptime(
+                df.loc[i][1][:-6], "%Y-%m-%d")
+        else:
+            target_day = datetime.datetime.strptime(
+                df.loc[i][1][:-5], "%Y-%m-%d")
+        if (start_day != target_day.day):
             end_index = i
             break
 
